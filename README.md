@@ -51,6 +51,16 @@ return {
 }
 ```
 
+For packer:
+
+```lua
+use ({
+    "Bryley/neoai.nvim",
+    require = { "MunifTanjim/nui.nvim" },
+})
+
+
+```
 
 ## Showcase and Usage
 
@@ -171,7 +181,9 @@ require('neoai').setup{
     open_api_key_env = "OPENAI_API_KEY",
     shortcuts = {
         {
+            name = "textify",
             key = "<leader>as",
+            desc = "fix text with AI",
             use_context = true,
             prompt = [[
                 Please rewrite the text to make it more readable, clear,
@@ -182,7 +194,9 @@ require('neoai').setup{
             strip_function = nil,
         },
         {
+            name = "gitcommit",
             key = "<leader>ag",
+            desc = "generate git commit message",
             use_context = false,
             prompt = function ()
                 return [[
@@ -246,7 +260,9 @@ end
 
 ### Shortcut Options
  - `shortcuts`: An array of shortcuts. Each shortcut is a table containing:
- - `key`: The keybind value to listen for.
+ - `name`: A string. The name of the shortcut, can trigger using :NeoAIShortcut <name>
+ - `key`: The keybind value to listen for or nil if no keybind for the shortcut.
+ - `desc` A string or nil. The description of the keybind if any
  - `use_context`: If the context from the selection/buffer should be used.
  - `prompt`: The prompt to send or a function to generate the prompt to send.
  - `modes`: A list of modes to set the keybind up for "n" for normal, "v" for visual.
@@ -306,18 +322,27 @@ into the buffer without opening the NeoAI window. The response will be stripped
 of everything except code snippets. The context used for this command is the
 visually selected text or the entire buffer if no selection is made.
 
+### :NeoAIShortcut &lt;shortcut&gt;
+Triggers a NeoAI shortcut that is created in the config via it's name instead of
+a keybinding.
+
 
 ## Roadmap:
 
-- [Issue 1](https://github.com/Bryley/neoai.nvim/issues/1)
-    - [ ] Add description option for shortcuts
-    - [ ] Have ability to have shortcuts be run via user command instead
-- [ ] Tests
+- [X] [Issue 1](https://github.com/Bryley/neoai.nvim/issues/1)
+    - [X] Add description option for shortcuts
+    - [X] Have ability to have shortcuts be run via user command instead
+- [ ] Tests (Started)
+- [ ] Multiple chat sessions
+- [ ] Telescope Integration
 - [ ] Switching Models
 - [ ] Better Colours (eg. highlighting user input)
 - [ ] Highlight context when inside NeoAIContext buffer or make context clear
 - [ ] Keymap for replacing context with newly generated code
-- [ ] Better error detection
+- [ ] Support for:
+    - [ ] Amazon CodeWhisperer
+    - [ ] Github Copilot
+- [X] Better error detection
 - [X] Back and forth conversations
 - [X] Context using visual mode
 - [X] Fix when using :q on NeoAI GUI

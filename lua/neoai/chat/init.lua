@@ -53,8 +53,8 @@ end
 ---@param line2 number
 M.set_context = function(buffer, line1, line2)
     local context = table.concat(vim.api.nvim_buf_get_lines(buffer, line1 - 1, line2, false), "\n")
-    M.chat_history = nil
     M.context = context
+    M.new_chat_history()
 end
 
 M.reset = function()
@@ -74,7 +74,9 @@ end
 ---@param separators boolean True if separators should be included
 ---@param on_complete fun(output: string) Called when completed
 M.send_prompt = function(prompt, append_to_output_func, separators, on_complete)
-    append_to_output = append_to_output_func
+    append_to_output = function (txt, type)
+        local ok, _ = pcall(append_to_output_func, txt, type)
+    end
     if separators then
         append_to_output(prompt .. "\n\n--------\n\n", 1)
     end
